@@ -47,13 +47,33 @@ map.on('load', () => {
     });
 });
 
-// ระบบเปิด-ปิด Layer (เชื่อมกับ Checkbox ใน index.html)
-document.getElementById('layer-watershed')?.addEventListener('change', (e) => {
-    map.setLayoutProperty('watershed-layer', 'visibility', e.target.checked ? 'visible' : 'none');
+// โค้ดนี้ต้องอยู่ภายใน map.on('load', ... ) หรือหลังจากที่ addLayer เรียบร้อยแล้ว
+
+// ฟังก์ชันสำหรับควบคุมการเปิด-ปิด Layer เส้นขอบเขต
+document.getElementById('layer-boundary').addEventListener('change', function (e) {
+    // ตรวจสอบว่า Checkbox ถูกติ๊กอยู่หรือไม่
+    const isVisible = e.target.checked;
+    
+    if (map.getLayer('boundary-layer')) { // 'boundary-layer' คือ ID ที่เราตั้งไว้ตอน map.addLayer
+        map.setLayoutProperty(
+            'boundary-layer', 
+            'visibility', 
+            isVisible ? 'visible' : 'none'
+        );
+    }
 });
 
-document.getElementById('layer-boundary')?.addEventListener('change', (e) => {
-    map.setLayoutProperty('boundary-layer', 'visibility', e.target.checked ? 'visible' : 'none');
+// ฟังก์ชันสำหรับควบคุมการเปิด-ปิด Layer ถนน
+document.getElementById('layer-road').addEventListener('change', function (e) {
+    const isVisible = e.target.checked;
+    
+    if (map.getLayer('watershed-layer')) {
+        map.setLayoutProperty(
+            'layer-road', 
+            'visibility', 
+            isVisible ? 'visible' : 'none'
+        );
+    }
 });
 
 
